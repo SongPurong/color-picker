@@ -30,23 +30,19 @@
         </div>
       </div>
       <div class="gradient-degree">
-        <div class="gradient-degree-input" name="degree" ref="degree">
-          <input
-            :value="colorData.degree + '°'"
-            @blur="(e) => handleAngleBlur(e.target.value)"
-          />
-        </div>
-        <tippy
-          to="degree"
-          theme="light"
-          interactive
-          placement="bottom"
-          :appendTo="() => this.$refs.degree"
-          trigger="click"
-          @clickOutside.stop
-        >
-          <angle :angle="colorData.degree" @change="handleAngleChange"></angle>
-        </tippy>
+        <a-popover trigger="click" placement="bottom">
+          <div class="gradient-degree-input" name="degree" ref="degree">
+            <input
+              :value="colorData.degree + '°'"
+              @blur="(e) => handleAngleBlur(e.target.value)"
+            />
+          </div>
+          <angle
+            :angle="colorData.degree"
+            @change="handleAngleChange"
+            slot="content"
+          ></angle>
+        </a-popover>
       </div>
     </div>
     <single-color-picker
@@ -59,8 +55,6 @@
 </template>
 
 <script>
-import { TippyComponent } from "vue-tippy";
-import "tippy.js/themes/light.css";
 import Angle from "../components/Angle.vue";
 import SingleColorPicker from "./SingleColorPicker.vue";
 
@@ -70,7 +64,6 @@ import { handleDragEvent } from "../utils/Dom";
 export default {
   name: "GradientColorPicker",
   components: {
-    Tippy: TippyComponent,
     Angle,
     SingleColorPicker,
   },

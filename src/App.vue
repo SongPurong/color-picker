@@ -1,6 +1,7 @@
 <template>
   <div class="wrap">
     <color-picker
+      class="color-picker"
       :color="gradientColor"
       :type="type"
       @change="handleChange"
@@ -30,10 +31,9 @@ export default {
 
 <style lang="less" scoped>
 .wrap {
-  position: relative;
-  overflow: hidden;
-  width: 300px;
-  height: 400px;
-  margin-left: 300px;
+  height: 100%;
+  .color-picker {
+    margin: 0 auto;
+  }
 }
 </style>

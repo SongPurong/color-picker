@@ -1,6 +1,6 @@
 <template>
-  <div class="color-picker">
-    <div class="surface-wrap transparent" name="target">
+  <a-popover trigger="click" placement="bottom">
+    <div class="surface-wrap transparent" ref="surface">
       <div
         :style="{
           background,
@@ -8,44 +8,40 @@
         }"
       ></div>
     </div>
-    <tippy to="target" trigger="click" theme="light" interactive ref="tippy">
-      <div class="tippy-wrap">
-        <div class="tabs">
-          <div
-            :class="{ tab: true, active: tabIndex === 'single' }"
-            @click="tabIndex = 'single'"
-          >
-            纯色
-          </div>
-          <div
-            :class="{ tab: true, active: tabIndex === 'gradient' }"
-            @click="tabIndex = 'gradient'"
-          >
-            渐变
-          </div>
+    <div class="content-wrap" slot="content">
+      <div class="tabs">
+        <div
+          :class="{ tab: true, active: tabIndex === 'single' }"
+          @click="tabIndex = 'single'"
+        >
+          纯色
         </div>
+        <div
+          :class="{ tab: true, active: tabIndex === 'gradient' }"
+          @click="tabIndex = 'gradient'"
+        >
+          渐变
+        </div>
+      </div>
+      <div v-show="tabIndex === 'single'">
         <SingleColorPicker
           v-bind="colorData"
-          @change="handleChange"
           :opacityDisabled="opacityDisabled"
-          v-show="tabIndex === 'single'"
         ></SingleColorPicker>
+      </div>
+      <div v-show="tabIndex === 'gradient'">
         <GradientColorPicker
           v-bind="colorData"
-          @change="handleChange"
           :opacityDisabled="opacityDisabled"
-          v-show="tabIndex === 'gradient'"
         ></GradientColorPicker>
       </div>
-    </tippy>
-  </div>
+    </div>
+  </a-popover>
 </template>
 
 <script>
 import SingleColorPicker from "./SingleColorPicker.vue";
 import GradientColorPicker from "./GradientColorPicker.vue";
-import { TippyComponent } from "vue-tippy";
-import "tippy.js/themes/light.css";
 import tinycolor from "tinycolor2";
 
 export default {
@@ -53,7 +49,6 @@ export default {
   components: {
     SingleColorPicker,
     GradientColorPicker,
-    Tippy: TippyComponent,
   },
   props: {
     color: {
@@ -158,18 +153,16 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.color-picker {
+.surface-wrap {
+  width: 100px;
+  height: 25px;
+  box-shadow: 0 0 5px 0 #ccc;
   cursor: pointer;
-  .surface-wrap {
-    width: 100px;
-    height: 25px;
-    box-shadow: 0 0 5px 0 #ccc;
-  }
 }
 .tabs {
   display: flex;
   justify-content: center;
-  align-items: center;
+  text-align: center;
   margin-bottom: 10px;
   background-color: #f7f7f7;
   border-radius: 4px;
@@ -185,7 +178,7 @@ export default {
     font-weight: bold;
   }
 }
-.tippy-wrap {
+.content-wrap {
   width: 243px;
   padding: 11px 7px 16px;
   box-sizing: content-box;
