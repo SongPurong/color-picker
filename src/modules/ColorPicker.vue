@@ -9,7 +9,7 @@
       ></div>
     </div>
     <div class="content-wrap" slot="content">
-      <div class="tabs">
+      <div class="tabs" v-if="type === 'both'">
         <div
           :class="{ tab: true, active: tabIndex === 'single' }"
           @click="tabIndex = 'single'"
@@ -23,18 +23,20 @@
           渐变
         </div>
       </div>
-      <div v-show="tabIndex === 'single'">
-        <SingleColorPicker
-          v-bind="colorData"
-          :opacityDisabled="opacityDisabled"
-        ></SingleColorPicker>
-      </div>
-      <div v-show="tabIndex === 'gradient'">
-        <GradientColorPicker
-          v-bind="colorData"
-          :opacityDisabled="opacityDisabled"
-        ></GradientColorPicker>
-      </div>
+      <SingleColorPicker
+        v-bind="colorData"
+        :opacityDisabled="opacityDisabled"
+        @change="handleChange"
+        v-if="type === 'single' || type === 'both'"
+        v-show="tabIndex === 'single'"
+      ></SingleColorPicker>
+      <GradientColorPicker
+        v-bind="colorData"
+        :opacityDisabled="opacityDisabled"
+        @change="handleChange"
+        v-if="type === 'gradient' || type === 'both'"
+        v-show="tabIndex === 'gradient'"
+      ></GradientColorPicker>
     </div>
   </a-popover>
 </template>
@@ -59,6 +61,12 @@ export default {
       type: Boolean,
       default: false,
     },
+    type: {
+      type: String,
+      default: "both",
+      validator: (value) =>
+        value === "single" || value === "gradient" || value === "both",
+    },
   },
   data() {
     return {
@@ -72,6 +80,7 @@ export default {
         endColor: "#000000",
         endOpactity: 100,
         endLeft: 100,
+        degree: 90,
       },
     };
   },
@@ -131,7 +140,11 @@ export default {
             endOpacity: colors[1].getAlpha() * 100,
             endLeft: positions[1],
           };
-          this.tabIndex = "gradient";
+          if (this.type === "both" || this.type === "gradient") {
+            this.tabIndex = "gradient";
+          } else {
+            this.tabIndex === "single";
+          }
         } else {
           const color = tinycolor(this.color);
           this.colorData = {
@@ -139,7 +152,11 @@ export default {
             color: color.toHexString(),
             opacity: color.getAlpha() * 100,
           };
-          this.tabIndex = "single";
+          if (this.type === "both" || this.type === "single") {
+            this.tabIndex = "single";
+          } else {
+            this.tabIndex = "gradient";
+          }
         }
       } catch (e) {
         console.error("请输入正确的颜色:", e);

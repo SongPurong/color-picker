@@ -109,7 +109,15 @@ export default {
   data() {
     return {
       isStartActive: true,
-      colorData: {},
+      colorData: {
+        degree: this.degree,
+        startColor: this.startColor,
+        startOpacity: this.startOpacity,
+        startLeft: this.startLeft,
+        endColor: this.endColor,
+        endOpacity: this.endOpacity,
+        endLeft: this.endLeft,
+      },
     };
   },
   computed: {
@@ -206,19 +214,6 @@ export default {
         }
       }
     },
-  },
-  mounted() {
-    setTimeout(() => {
-      this.colorData = {
-        degree: this.degree,
-        startColor: this.startColor,
-        startOpacity: this.startOpacity,
-        startLeft: this.startLeft,
-        endColor: this.endColor,
-        endOpacity: this.endOpacity,
-        endLeft: this.endLeft,
-      };
-    }, 0);
   },
 };
 </script>
